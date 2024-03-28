@@ -1,21 +1,18 @@
 let questionInput = document.getElementById("questionInput");
+let questionInputLabel = document.getElementById("questionInputLabel");
+let sizeDisplay = document.getElementById("numberQuestions");
 
-let text = `TOSS-UP
-2) CHEMISTRY Multiple Choice An aqueous solution in which the concentration of OH– ions is
-greater than that of H+ ions is:
-W) basic
-X) acidic
-Y) neutral
-Z) in equilibrium
-ANSWER: W) BASIC
-BONUS
-2) CHEMISTRY Short Answer Find the mass of 1 mole of cuprous oxide, or Cu2O. Assume the
-atomic mass of copper is 64 and oxygen is 16.
-ANSWER: 144`;
+let questionList = JSON.parse(sessionStorage.getItem("questionList"));
+updateDisplay();
 
-let test;
+function updateDisplay() {
+  sizeDisplay.textContent = `Current Question Set Size: ${questionList.length} Questions`;
+}
 
-let questionList = [];
+function clearSet() {
+  questionList = [];
+  updateDisplay();
+}
 
 function processQuestions() {
   let rawQuestions = questionInput.value;
@@ -23,7 +20,11 @@ function processQuestions() {
   for (let i = 1; i < questions.length; i++) {
     questionList.push(parseQuestion(questions[i]));
   }
-  console.log(questionList);
+  sessionStorage.setItem("questionList", JSON.stringify(questionList)); //Pass to the next page
+  questionInput.value = "";
+  questionInputLabel.textContent =
+    "Question Set Successfully Submitted! Please go to the Questions tab to practice!";
+  updateDisplay();
 }
 
 function parseQuestion(text) {

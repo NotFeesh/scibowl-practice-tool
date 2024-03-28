@@ -36,6 +36,10 @@
       </div>
     </nav>
 
+    <div class="text-center mt-3 fs-4" id="numberQuestions">
+      Current Question Set Size: 0 Questions
+    </div>
+
     <div class="form-floating">
       <textarea
         class="form-control"
@@ -43,7 +47,7 @@
         id="questionInput"
         style="height: 20rem"
       ></textarea>
-      <label for="floatingTextarea"
+      <label for="floatingTextarea" id="questionInputLabel"
         >Paste Question Set Directly From NSB Here</label
       >
     </div>
@@ -54,6 +58,9 @@
         onclick="processQuestions()"
       >
         Submit
+      </button>
+      <button type="button" class="btn btn-primary" onclick="clearSet()">
+        Clear Question Sets
       </button>
     </div>
 
