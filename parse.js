@@ -12,7 +12,7 @@ function updateDisplay() {
 function clearSet() {
   questionList = [];
   sessionStorage.setItem("questionList", JSON.stringify(questionList));
-  sessionStorage.setItem("currentQuestion", 0);
+  sessionStorage.setItem("currentQuestion", -1);
   updateDisplay();
 }
 
@@ -62,7 +62,7 @@ function parseQuestion(text) {
     rawTossUp.indexOf(tossUp.questionType) + tossUp.questionType.length;
   let questionEnd = rawTossUp.indexOf("ANSWER");
 
-  tossUp.question = rawTossUp.substring(questionStart, questionEnd).trim();
+  tossUp.question = rawTossUp.substring(questionStart, questionEnd);
 
   console.log(tossUp.question);
 
@@ -88,7 +88,7 @@ function parseQuestion(text) {
     rawBonus.indexOf(bonus.questionType) + bonus.questionType.length;
   questionEnd = rawBonus.indexOf("ANSWER");
 
-  bonus.question = rawBonus.substring(questionStart, questionEnd).trim();
+  bonus.question = rawBonus.substring(questionStart, questionEnd);
 
   console.log(bonus.question);
 
