@@ -40,10 +40,21 @@
       <textarea
         class="form-control"
         placeholder="Leave a comment here"
-        id="floatingTextarea"
+        id="questionInput"
         style="height: 20rem"
       ></textarea>
-      <label for="floatingTextarea">Comments</label>
+      <label for="floatingTextarea"
+        >Paste Question Set Directly From NSB Here</label
+      >
+    </div>
+    <div class="text-center mt-3">
+      <button
+        type="button"
+        class="btn btn-primary"
+        onclick="processQuestions()"
+      >
+        Submit
+      </button>
     </div>
 
     <script src="scibowl.js"></script>
