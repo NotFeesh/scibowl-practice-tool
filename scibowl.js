@@ -13,10 +13,17 @@ BONUS
 atomic mass of copper is 64 and oxygen is 16.
 ANSWER: 144`;
 
-function processQuestions() {
-  let questions = questionInput.value;
+let test;
 
-  console.log(parseQuestion(questions));
+let questionList = [];
+
+function processQuestions() {
+  let rawQuestions = questionInput.value;
+  let questions = rawQuestions.split("TOSS-UP");
+  for (let i = 1; i < questions.length; i++) {
+    questionList.push(parseQuestion(questions[i]));
+  }
+  console.log(questionList);
 }
 
 function parseQuestion(text) {
@@ -26,11 +33,13 @@ function parseQuestion(text) {
   let [rawTossUp, rawBonus] = [temp[0], temp[1]];
   let [tossUpText, bonusText] = [temp[0].split("\n"), temp[1].split("\n")];
 
+  /*
   console.log(tossUpText);
   console.log(bonusText);
 
   console.log(rawTossUp);
   console.log(rawBonus);
+  */
 
   //Subject
   temp = tossUpText[1].split(" ");
@@ -55,10 +64,11 @@ function parseQuestion(text) {
   console.log(tossUp.question);
 
   //Answer
-  tossUp.answer = rawTossUp
+  temp = rawTossUp
     .substring(rawTossUp.indexOf("ANSWER:"))
     .replace("ANSWER:", "")
-    .trim();
+    .split("\n");
+  tossUp.answer = temp[0].trim();
   console.log(tossUp.answer);
 
   //Bonus
@@ -79,11 +89,12 @@ function parseQuestion(text) {
 
   console.log(bonus.question);
 
-  //Bonus
-  bonus.answer = rawBonus
+  //Answer
+  temp = rawBonus
     .substring(rawBonus.indexOf("ANSWER:"))
     .replace("ANSWER:", "")
-    .trim();
+    .split("\n");
+  bonus.answer = temp[0].trim();
   console.log(bonus.answer);
 
   questionGroup.tossUp = tossUp;
