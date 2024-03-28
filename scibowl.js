@@ -9,12 +9,30 @@ let questionText = document.getElementById("question");
 let typeText = document.getElementById("type");
 let answerInput = document.getElementById("answerInput");
 
+let timeUp = false;
+
 function newQuestion() {
+  timerText.textContent = "-";
   questionNumber++;
   question = questions[questionNumber];
 
-  typeText.textContent = `${question.subject} ${question.tossUp.questionType}`;
+  //Toss Up
+  typeText.textContent = `TOSS-UP ${question.subject} ${question.tossUp.questionType}`;
   questionText.textContent = question.tossUp.question;
 
-  console.log(question);
+  let readTime = question.tossUp.question.split(" ").length * (1000 / 3);
+  timerText.textContent = "READ";
+  setTimeout(() => {
+    timer(false);
+  }, readTime);
+}
+
+function timer(isBonus) {
+  //console.log("timer");
+  let time = isBonus ? 20000 : 5000;
+  timerText.textContent = "WORK";
+  setTimeout(() => {
+    //console.log("timeout finsihed");
+    timerText.textContent = "TIME!";
+  }, time);
 }
