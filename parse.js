@@ -11,7 +11,9 @@ if (sessionStorage.getItem("questionList") === null) {
 updateDisplay();
 
 function updateDisplay() {
-  sizeDisplay.textContent = `Current Question Set Size: ${questionList.length} Questions`;
+  sizeDisplay.textContent = `Current Question Set Size: ${
+    questionList.length > 0 ? questionList.length - 1 : 0
+  } Questions`;
 }
 
 function clearSet() {
@@ -27,6 +29,7 @@ function processQuestions() {
   for (let i = 1; i < questions.length; i++) {
     questionList.push(parseQuestion(questions[i]));
   }
+  questionList.unshift(""); //add empty question
   sessionStorage.setItem("questionList", JSON.stringify(questionList)); //Pass to the next page
   questionInput.value = "";
   questionInputLabel.textContent =

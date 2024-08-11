@@ -25,7 +25,9 @@ let showQuestion = document.getElementById("showQuestion");
 
 let timeUp = false;
 
-let timeKeeper, interrupt;
+let timeKeeper = null;
+let interrupt = false;
+let canAnswer = false;
 
 let stats =
   sessionStorage.getItem("stats") === null
@@ -59,12 +61,14 @@ function updateStats() {
   scoreStat.textContent = stats.score;
   totalQuestionsStat.textContent = stats.total;
   accuracyStat.textContent =
-    stats.total == 0 ? 0 : (stats.totalCorrect / stats.total) * 100;
+    stats.total == 0
+      ? "0.00"
+      : ((stats.totalCorrect / stats.total) * 100).toFixed(2);
   interruptStat.textContent = stats.interrupts;
   interruptAccuracyStat.textContent =
     stats.interrupts == 0
-      ? 0
-      : (stats.interruptsCorrect / stats.interrupts) * 100;
+      ? "0.00"
+      : ((stats.interruptsCorrect / stats.interrupts) * 100).toFixed(2);
 }
 
 showQuestion.addEventListener("change", () => {
@@ -92,15 +96,22 @@ function keyDownHandler(e) {
 }
 
 function buzz() {
-  if (window.speechSynthesis.speaking || timeKeeper != null) {
-    if (interrupt) stats.interrupts++;
+  if (canAnswer) {
+    if (interrupt) {
+      stats.interrupts++;
+      interrupt = true;
+      window.speechSynthesis.cancel();
+    }
+
+    // Clear the timeout on buzz
+    if (timeKeeper !== null) {
+      clearTimeout(timeKeeper);
+      timeKeeper = null;
+    }
 
     timerText.textContent = "TYPE ANSWER";
-    window.speechSynthesis.cancel();
-    interrupt = true;
-    clearTimeout(timeKeeper);
-    answerContainer.style.display = "flex";
 
+    answerContainer.style.display = "flex";
     answerInput.focus();
   }
 }
@@ -112,7 +123,9 @@ function answer() {
 }
 
 function correct() {
-  if (interrupt) stats.interruptsCorrect++;
+  if (interrupt) {
+    stats.interruptsCorrect++;
+  }
   stats.totalCorrect++;
   stats.score += 4;
   updateStats();
@@ -124,6 +137,7 @@ function wrong() {
 }
 
 async function newQuestion() {
+  canAnswer = true;
   interrupt = false;
 
   answerInput.value = "";
@@ -132,11 +146,12 @@ async function newQuestion() {
   answerContainer.style.display = "none";
   window.speechSynthesis.cancel();
   clearTimeout(timeKeeper);
+  timeKeeper = null;
 
   timerText.textContent = "-";
-  questionNumber++;
-  sessionStorage.setItem("currentQuestion", questionNumber);
-  question = questions[questionNumber];
+  questions.shift();
+  sessionStorage.setItem("questionList", JSON.stringify(questions));
+  question = questions[0];
 
   //Toss Up
   typeText.textContent = `TOSS-UP ${question.subject} ${question.tossUp.questionType}`;
@@ -175,22 +190,30 @@ function questionTimer(isBonus) {
 
   if (isBonus) {
     timeKeeper = setTimeout(() => {
-      timerText.textContent = "5 Seconds";
-      window.speechSynthesis.speak(warningSpeech);
+      if (canAnswer) {
+        timerText.textContent = "5 Seconds";
+        window.speechSynthesis.speak(warningSpeech);
+      }
     }, 15000);
 
     timeKeeper = setTimeout(() => {
-      timerText.textContent = "TIME!";
-      window.speechSynthesis.speak(timeSpeech);
-    }, 5000);
-
-    timeKeeper = null;
+      if (canAnswer) {
+        canAnswer = false;
+        timerText.textContent = "TIME!";
+        window.speechSynthesis.speak(timeSpeech);
+        stats.total++;
+        updateStats();
+      }
+    }, 20000); // 5 seconds after the warning speech
   } else {
     timeKeeper = setTimeout(() => {
-      timerText.textContent = "TIME!";
-      window.speechSynthesis.speak(timeSpeech);
+      if (canAnswer) {
+        canAnswer = false;
+        timerText.textContent = "TIME!";
+        window.speechSynthesis.speak(timeSpeech);
+        stats.total++;
+        updateStats();
+      }
     }, 5000);
-
-    timeKeeper = null;
   }
 }
