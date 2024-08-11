@@ -36,18 +36,18 @@ function parseQuestion(text) {
   let [rawTossUp, rawBonus] = [temp[0], temp[1]];
   let [tossUpText, bonusText] = [temp[0].split("\n"), temp[1].split("\n")];
 
-  /*
   console.log(tossUpText);
   console.log(bonusText);
 
   console.log(rawTossUp);
   console.log(rawBonus);
-  */
 
   //Subject
+
   temp = tossUpText[1].split(" ");
 
   questionGroup.subject = temp[1];
+
   console.log(questionGroup.subject);
 
   //Toss Up
