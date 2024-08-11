@@ -90,6 +90,12 @@ function keyDownHandler(e) {
     case "Enter":
       answer();
       break;
+    case "[":
+      correct();
+      break;
+    case "]":
+      wrong();
+      break;
     default:
       break;
   }
@@ -129,11 +135,13 @@ function correct() {
   stats.totalCorrect++;
   stats.score += 4;
   updateStats();
+  correctContainer.style.display = "none";
 }
 
 function wrong() {
   if (interrupt) stats.score -= 4;
   updateStats();
+  correctContainer.style.display = "none";
 }
 
 async function newQuestion() {
