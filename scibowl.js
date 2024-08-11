@@ -104,9 +104,10 @@ function keyDownHandler(e) {
 function buzz() {
   if (canAnswer) {
     if (interrupt) {
-      stats.interrupts++;
-      interrupt = true;
+      timerText.textContent = "INTERRUPT - TYPE ANSWER";
       window.speechSynthesis.cancel();
+    } else {
+      timerText.textContent = "TYPE ANSWER";
     }
 
     // Clear the timeout on buzz
@@ -115,14 +116,15 @@ function buzz() {
       timeKeeper = null;
     }
 
-    timerText.textContent = "TYPE ANSWER";
-
     answerContainer.style.display = "flex";
     answerInput.focus();
   }
 }
 
 function answer() {
+  if (interrupt) {
+    stats.interrupts++;
+  }
   stats.total++;
   answerInput.blur();
   correctContainer.style.display = "block";
