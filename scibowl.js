@@ -23,6 +23,8 @@ let interruptAccuracyStat = document.getElementById("interruptAccuracy");
 let speakingSpeed = document.getElementById("rate");
 let showQuestion = document.getElementById("showQuestion");
 
+let answerTime = document.getElementById("answerTime");
+
 let timeUp = false;
 
 let timeKeeper = null;
@@ -224,6 +226,6 @@ function questionTimer(isBonus) {
         stats.total++;
         updateStats();
       }
-    }, 5000);
+    }, answerTime.value);
   }
 }
