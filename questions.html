@@ -75,6 +75,7 @@
           class="btn btn-outline-success"
           type="button"
           id="button-addon2"
+          onclick="answer()"
         >
           Submit Answer (Enter)
         </button>
@@ -82,6 +83,14 @@
 
       <div id="correctContainer" class="mt-3" style="display: none">
         <h3 id="correctAnswer">Answer</h3>
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button type="button" class="btn btn-success" onclick="correct()">
+            Correct
+          </button>
+          <button type="button" class="btn btn-danger" onclick="wrong()">
+            Wrong
+          </button>
+        </div>
       </div>
 
       <div>
@@ -113,6 +122,21 @@
           >Show Question</label
         >
       </div>
+
+      <div class="mt-3">
+        <h5>Score: <span id="score">0</span></h5>
+        <h5>Questions Answered: <span id="totalQuestions">0</span></h5>
+        <h5>Accuracy: <span id="accuracy">0</span>%</h5>
+        <h5>Interrupts: <span id="interrupts">0</span></h5>
+        <h5>Interrupt Accuracy: <span id="interruptAccuracy">0</span>%</h5>
+      </div>
+      <button
+        type="button"
+        class="btn btn-danger mt-3 ms-1 me-1"
+        onclick="clearStats()"
+      >
+        Reset Stats
+      </button>
     </div>
 
     <script src="scibowl.js"></script>

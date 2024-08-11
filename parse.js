@@ -2,7 +2,12 @@ let questionInput = document.getElementById("questionInput");
 let questionInputLabel = document.getElementById("questionInputLabel");
 let sizeDisplay = document.getElementById("numberQuestions");
 
-let questionList = JSON.parse(sessionStorage.getItem("questionList"));
+if (sessionStorage.getItem("questionList") === null) {
+  questionList = [];
+} else {
+  questionList = JSON.parse(sessionStorage.getItem("questionList"));
+}
+
 updateDisplay();
 
 function updateDisplay() {
