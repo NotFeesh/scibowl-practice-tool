@@ -48,13 +48,31 @@ function parseQuestion(text) {
   // Extract subject from toss-up question
   const tossUpText = rawTossUp.split("\n");
   const subjectParts = tossUpText[1].split(" ");
-  questionGroup.subject = subjectParts[1];
+
+  // Determine if the subject is one or two words
+  let subject;
+  let questionTypeIndex;
+  if (subjectParts[2] === "Multiple" || subjectParts[2] === "Short") {
+    subject = subjectParts[1];
+    questionTypeIndex = 2;
+  } else {
+    subject = subjectParts.slice(1, 3).join(" ");
+    questionTypeIndex = 3;
+  }
+
+  questionGroup.subject = subject;
 
   // Parse Toss-Up question
   const tossUp = {
     questionType:
-      subjectParts[2] === "Multiple" ? "Multiple Choice" : "Short Answer",
-    question: extractText(rawTossUp, subjectParts[3], "ANSWER"),
+      subjectParts[questionTypeIndex] === "Multiple"
+        ? "Multiple Choice"
+        : "Short Answer",
+    question: extractText(
+      rawTossUp,
+      subjectParts[questionTypeIndex + 1],
+      "ANSWER"
+    ),
     answer: extractAnswer(rawTossUp),
   };
 
