@@ -38,8 +38,7 @@ function processQuestions() {
   questionList.unshift(""); // Add an empty question to the beginning of the list
   sessionStorage.setItem("questionList", JSON.stringify(questionList)); // Save the list to session storage
   questionInput.value = ""; // Clear the input field
-  questionInputLabel.textContent =
-    "Question Set Successfully Submitted! Please go to the Questions tab to practice!";
+  questionInputLabel.textContent = "Question Set Successfully Submitted!";
   updateDisplay();
 }
 

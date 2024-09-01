@@ -21,15 +21,25 @@ let interruptStat = document.getElementById("interrupts");
 let interruptAccuracyStat = document.getElementById("interruptAccuracy");
 
 let speakingSpeed = document.getElementById("rate");
+let speakingSpeedDisplay = document.getElementById("speakingSpeedDisplay");
 let showQuestion = document.getElementById("showQuestion");
 
 let answerTime = document.getElementById("answerTime");
+let answerTimeDisplay = document.getElementById("tossupTimeDisplay");
 
 let timeUp = false;
 
 let timeKeeper = null;
 let interrupt = false;
 let canAnswer = false;
+
+speakingSpeed.oninput = function () {
+  speakingSpeedDisplay.innerHTML = `Current Speaking Speed: ${this.value}x`;
+};
+
+answerTime.oninput = function () {
+  answerTimeDisplay.innerHTML = `Toss-Up Answer Time: ${this.value / 1000}s`;
+};
 
 let stats =
   sessionStorage.getItem("stats") === null
