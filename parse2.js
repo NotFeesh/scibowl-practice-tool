@@ -27,7 +27,9 @@ function clearSet() {
 
 function processQuestions() {
   const rawQuestions = questionInput.value;
-  const questions = rawQuestions.split("TOSS-UP");
+  const questions = rawQuestions.includes("TOSS-UP")
+    ? rawQuestions.split("TOSS-UP")
+    : rawQuestions.split("TOSS UP");
 
   for (let i = 1; i < questions.length; i++) {
     questionList.push(parseQuestion(questions[i]));
