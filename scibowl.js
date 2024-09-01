@@ -7,7 +7,6 @@ let questionNumber =
 
 let timerText = document.getElementById("timer");
 let questionText = document.getElementById("question");
-let typeText = document.getElementById("type");
 let answerInput = document.getElementById("answerInput");
 let questionContainer = document.getElementById("questionContainer");
 let answerContainer = document.getElementById("answerContainer");
@@ -32,6 +31,10 @@ let timeUp = false;
 let timeKeeper = null;
 let interrupt = false;
 let canAnswer = false;
+
+let questionTextContent = "";
+
+let previousBoundaryIndex = 0;
 
 speakingSpeed.oninput = function () {
   speakingSpeedDisplay.innerHTML = `Current Speaking Speed: ${this.value}x`;
@@ -158,10 +161,38 @@ function wrong() {
   correctContainer.style.display = "none";
 }
 
+function onboundaryHandler(event) {
+  const question = questions[0];
+  const value = `TOSS UP ${question.subject} ${question.tossUp.questionType} ${question.tossUp.question}`;
+
+  let word;
+
+  const index = event.charIndex;
+  word = value.substring(previousBoundaryIndex, index);
+
+  // Extract the word at the current boundary
+
+  // Append the word to the text content, avoiding duplicate first words
+  if (word) {
+    questionText.textContent += (questionText.textContent ? " " : "") + word;
+  }
+
+  previousBoundaryIndex = index;
+}
+
+function onendHandler() {
+  const question = questions[0];
+  const value = `TOSS UP ${question.subject} ${question.tossUp.questionType} ${question.tossUp.question}`;
+
+  questionText.textContent += " " + value.substring(previousBoundaryIndex);
+}
+
 async function newQuestion() {
+  previousBoundaryIndex = 0;
   canAnswer = true;
   interrupt = false;
-
+  questionTextContent = "";
+  questionText.textContent = questionTextContent;
   answerInput.value = "";
 
   correctContainer.style.display = "none";
@@ -176,12 +207,11 @@ async function newQuestion() {
   question = questions[0];
 
   //Toss Up
-  typeText.textContent = `TOSS-UP ${question.subject} ${question.tossUp.questionType}`;
-  questionText.textContent = question.tossUp.question;
   answerText.textContent = `ANSWER: ${question.tossUp.answer}`;
 
   interrupt = true;
   await readQuestion(question);
+  onendHandler();
   interrupt = false;
 
   questionTimer(false);
@@ -189,6 +219,7 @@ async function newQuestion() {
 
 async function readQuestion(question) {
   let questionSpeech = new SpeechSynthesisUtterance();
+  questionSpeech.onboundary = onboundaryHandler;
   questionSpeech.text =
     `TOSS-UP ${question.subject} ${question.tossUp.questionType}` +
     question.tossUp.question;
