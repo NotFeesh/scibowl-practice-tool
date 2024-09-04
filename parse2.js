@@ -44,7 +44,7 @@ function processQuestions() {
 
 function parseQuestion(text) {
   const questionGroup = {};
-  const [rawTossUp, rawBonus] = text.split("BONUS");
+  const [rawTossUp] = text.split("BONUS");
 
   // Extract subject from toss-up question
   const tossUpText = rawTossUp.split("\n");
@@ -77,18 +77,7 @@ function parseQuestion(text) {
     answer: extractAnswer(rawTossUp),
   };
 
-  // Parse Bonus question
-  const bonusText = rawBonus.split("\n");
-  const bonusParts = bonusText[1].split(" ");
-  const bonus = {
-    questionType:
-      bonusParts[2] === "Multiple" ? "Multiple Choice" : "Short Answer",
-    question: extractText(rawBonus, bonusParts[3], "ANSWER"),
-    answer: extractAnswer(rawBonus),
-  };
-
   questionGroup.tossUp = tossUp;
-  questionGroup.bonus = bonus;
 
   return questionGroup;
 }
